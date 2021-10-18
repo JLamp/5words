@@ -6,16 +6,15 @@ import { transparentize } from 'polished';
 
 const PageContainer = styled.div`
 width: 100%;
-height: 100%;
+height: 100vh;
 display: flex;
 flex-direction: column;
-width: 100%;
 align-items: center;
 `;
 
 const AppHeader = styled.div`
 max-width: 960px;
-margin: 24px 0;
+margin: 16px 0;
 `;
 
 const MainContentArea = styled.div`
@@ -25,6 +24,12 @@ grid-column-gap: 24px;
 height: 100%;
 width: 100%;
 max-width: 960px;
+overflow: scroll;
+@media(max-width: 600px){
+  grid-template-columns: unset;
+  grid-template-rows: 2fr 1fr;
+  grid-row-gap: 16px;
+}
 `;
 
 const TextInput = styled.textarea`
@@ -36,8 +41,12 @@ line-height: 1.5;
 `;
 
 const OutputText = styled.div`
+overflow: scroll;
 & :first-child{
   margin-top: 0;
+}
+@media(max-width: 600px){
+  grid-row: 1;
 }
 `;
 
@@ -84,6 +93,23 @@ background: ${({syllables}) => transparentize(.75, getBackgroundColor(syllables)
 opacity: ${({repition}) => 1 - ( repition < 4 ? (.15 * repition) : (.15 * 4))};
 `;
 
+const Footer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: flex-end;
+  height: 96px;
+  background: white;
+  
+  font-size: 14px;
+  & span {
+    opacity: .6;
+  }
+  & a{
+    color: unset;
+  }
+`;
 
 
 function App() {
@@ -160,6 +186,10 @@ function App() {
     <TextInput type="textarea" placeholder={defaultText} name="name" onChange={handleChange}></TextInput>
     <OutputText>{text.map((paragraph, index) => <Paragraph key={index}>{paragraph.map((sentence, index) => <Sentence key={index} repition={checkRepition(paragraph, sentence, index)} syllables={count(sentence)}>{sentence.trim()}</Sentence>)}</Paragraph>)}</OutputText>
     </MainContentArea>
+    <Footer>
+      <span>Site by <a href="https://twitter.com/JLampron">lamp</a></span>
+      <span>Inspired by <a href="https://i1.wp.com/www.aerogrammestudio.com/wp-content/uploads/2014/08/this-sentence-has-five-works.jpg?w=640&ssl=1">this image</a>.</span>
+    </Footer>
     </PageContainer>
     );
   }
