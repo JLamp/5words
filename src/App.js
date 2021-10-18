@@ -154,7 +154,7 @@ function App() {
   return (
     <PageContainer>
     <AppHeader>
-    <h1>This sentence has 5 words...</h1>
+    <h1>This sentence has five words...</h1>
     </AppHeader>
     <MainContentArea>
     <TextInput type="textarea" placeholder={defaultText} name="name" onChange={handleChange}></TextInput>
