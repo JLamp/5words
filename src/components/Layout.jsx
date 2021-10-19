@@ -18,11 +18,13 @@ const Footer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0 auto;
   align-self: flex-end;
-  height: 96px;
+  height: 48px;
   background: white;
-
   font-size: 14px;
+  position: fixed;
+  bottom: 0px;
   & span {
     opacity: 0.6;
   }

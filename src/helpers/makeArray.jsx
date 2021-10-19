@@ -1,6 +1,6 @@
 export function splitSentence(e) {
   const arr = e.split(
-    /(?<=((?<!Adm|Amb|Brass|Brig|Gen|Br|Cpt|Capt|Chan|Chapln|Cmdr|Cdr|Col|Cpl|Cntss|Dr|Drs|Ens|Fr|Gen|Gov|Lt|2Lt|2dLt|Mlle|Maj|Sgt|Mme|Msgr|Mr|Mrs|Ms|Mx|Pres|Prof|Rep|Revs|Rev|Sgt|Sen|Sr|Hon)\.|!|\?)("|)\s)/
+    /(?<=((?<!Adm|Amb|Brass|Brig|Gen|Br|Cpt|Capt|Chan|Chapln|Cmdr|Cdr|Col|Cpl|Cntss|Dr|Drs|Ens|Fr|Gen|Gov|Lt|2Lt|2dLt|Mlle|Maj|Sgt|Mme|Msgr|Mr|Mrs|Ms|Mx|Pres|Prof|Rep|Revs|Rev|Sgt|Sen|Sr|Hon|[A-Z])\.|!|‽|\?)("|)\s)/
   );
   return arr;
 }
