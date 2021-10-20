@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import './App.css';
 import { useState } from 'react';
 import { Layout } from './components/Layout';
-import { CreateSentence } from './components/Sentence';
+import { CreateSentence, Output } from './components/Output';
 import { Text } from './constants/Text';
 import { makeArray } from './helpers/makeArray';
 import { ReactComponent as Clear } from  './components/icons/clear.svg';
@@ -66,25 +66,6 @@ font-size: 14px;
 line-height: 1.5;
 `;
 
-const OutputText = styled.div`
-overflow: scroll;
-& :first-child{
-  margin-top: 0;
-}
-@media(max-width: 600px){
-  grid-row: 1;
-}
-`;
-
-const Paragraph = styled.p`
-margin-top: 16px;
-margin-bottom: 16px;
-line-height: 1.7;
-& :first-child{
-  margin-left: 0;
-}
-`;
-
 const Button = styled.button`
   transition: all 400ms;
   padding: 4px 8px;
@@ -92,7 +73,7 @@ const Button = styled.button`
   border-radius: 4px;
   display: flex;
   align-items: center;
-  &:hover{
+  &:hover, :focus{
     background-color: rgb(235, 235, 237, 1);
   }
 `;
@@ -100,28 +81,26 @@ const Button = styled.button`
 function App() {
   const [userText, setUserText] = useState(false);
   const [placeholder, setPlaceholder] = useState(0);
-  const [text, setText] = useState(Text[0].text);
+  const [currentInput, setCurrentInput] = useState(Text[0].text);
   const [inputValue, setInputValue] = useState('');
-  
-  
   
   function handleChange({ currentTarget }) {
     const text = currentTarget.value;
     setInputValue(currentTarget.value);
     setUserText(currentTarget.value.length > 0);
-    setText(currentTarget.value.length > 0 ? text : (setPlaceholder(0), Text[0].text));
+    setCurrentInput(currentTarget.value.length > 0 ? text : (setPlaceholder(0), Text[0].text));
   }
 
   function randomText(){
     const ranNum = Math.floor(Math.random() * Text.length);
     setPlaceholder(ranNum);
-    setText(Text[ranNum].text);
+    setCurrentInput(Text[ranNum].text);
   }
 
   function clearText(){
     setInputValue('');
     setUserText(false);
-    setText(Text[0].text);
+    setCurrentInput(Text[0].text);
   };
 
   function handleClick(){
@@ -139,9 +118,9 @@ function App() {
       </ButtonContainer>
       <TextContentArea>
     <TextInputContainer>
-    <TextInput type="textarea" placeholder={Text[placeholder].text} value={inputValue} onChange={handleChange}></TextInput>
+    <TextInput type="textarea" placeholder={Text[placeholder].text} value={inputValue} onChange={handleChange}>{currentInput}</TextInput>
     </TextInputContainer>
-    <OutputText>{makeArray(text).map((paragraph, index) => <Paragraph key={index}>{paragraph.map((sentence, index) => CreateSentence(sentence, index, paragraph))}</Paragraph>)}</OutputText>
+    <Output text={currentInput}/>
     </TextContentArea>
     </MainContentArea>
     </Layout>
