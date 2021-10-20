@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import './App.css';
 import { useState } from 'react';
 import { Layout } from './components/Layout';
-import { CreateSentence, Output } from './components/Output';
+import { Output } from './components/Output';
 import { Text } from './constants/Text';
-import { makeArray } from './helpers/makeArray';
 import { ReactComponent as Clear } from  './components/icons/clear.svg';
 import { ReactComponent as Random } from './components/icons/random.svg';
 
@@ -14,6 +13,9 @@ flex-direction: column;
 height: 100%;
 width: 100%;
 max-width: 1024px;
+align-self: stretch;
+overflow: auto;
+margin: 0 auto;
 `;
 
 const TextContentArea = styled.div`
@@ -24,33 +26,37 @@ grid-column-gap: 24px;
   grid-template-columns: unset;
   grid-template-rows: 2fr 1fr;
   grid-row-gap: 16px;
+}
+& > {
+  overflow: scroll;
 }`;
 
 const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  line-height: 20px;
-  align-items: center;
-  padding-bottom: 8px;
-  position: sticky;
-  top: 0px;
-  padding-bottom: 0 16px;
-  background-color: white;
-  color: #62626c;
-  padding-left: 2px;
+display: flex;
+justify-content: space-between;
+font-size: 12px;
+line-height: 20px;
+align-items: center;
+padding-bottom: 8px;
+position: sticky;
+top: 0px;
+padding-bottom: 0 16px;
+background-color: white;
+color: #62626c;
+padding-left: 2px;
+z-index: 1000;
+& svg {
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  fill: #62626c;
+}
+& :hover {
+  color: #1f1f22;
   & svg {
-    width: 12px;
-    height: 12px;
-    margin-right: 4px;
-    fill: #62626c;
+    fill: #1f1f22;
   }
-  & :hover {
-    color: #1f1f22;
-    & svg {
-      fill: #1f1f22;
-    }
-  }
+}
 `;
 
 const TextInputContainer = styled.div`
@@ -67,15 +73,15 @@ line-height: 1.5;
 `;
 
 const Button = styled.button`
-  transition: all 400ms;
-  padding: 4px 8px;
-  background-color: rgba(235, 235, 237, 0);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  &:hover, :focus{
-    background-color: rgb(235, 235, 237, 1);
-  }
+transition: all 400ms;
+padding: 4px 8px;
+background-color: rgba(235, 235, 237, 0);
+border-radius: 4px;
+display: flex;
+align-items: center;
+&:hover, :focus{
+  background-color: rgb(235, 235, 237, 1);
+}
 `;
 
 function App() {
@@ -90,33 +96,34 @@ function App() {
     setUserText(currentTarget.value.length > 0);
     setCurrentInput(currentTarget.value.length > 0 ? text : (setPlaceholder(0), Text[0].text));
   }
-
+  
   function randomText(){
     const ranNum = Math.floor(Math.random() * Text.length);
     setPlaceholder(ranNum);
     setCurrentInput(Text[ranNum].text);
   }
-
+  
   function clearText(){
     setInputValue('');
     setUserText(false);
     setCurrentInput(Text[0].text);
   };
-
+  
   function handleClick(){
     userText ? clearText() : randomText();
   }
-
+  
   const ButtonText = userText ? {text: "Your lovely words", icon: <Clear />, button: "Clear"} :  {text: (Text[placeholder].title + " — " + Text[placeholder].author), icon: <Random />, button: "Random" };
   
+  console.log()
   return (
     <Layout>
     <MainContentArea>
-      <ButtonContainer>
-        <span>{ButtonText.text}</span>
-      <Button onClick={handleClick}>{ButtonText.icon}<span>{ButtonText.button}</span></Button>
-      </ButtonContainer>
-      <TextContentArea>
+    <ButtonContainer>
+    <span>{ButtonText.text}</span>
+    <Button onClick={handleClick}>{ButtonText.icon}<span>{ButtonText.button}</span></Button>
+    </ButtonContainer>
+    <TextContentArea>
     <TextInputContainer>
     <TextInput type="textarea" placeholder={Text[placeholder].text} value={inputValue} onChange={handleChange}>{currentInput}</TextInput>
     </TextInputContainer>
@@ -124,8 +131,11 @@ function App() {
     </TextContentArea>
     </MainContentArea>
     </Layout>
+    
     );
   }
+  
+  
   
   export default App;
   

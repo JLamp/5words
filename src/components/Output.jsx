@@ -23,32 +23,35 @@ const Paragraph = styled.p`
 `;
 
 const Sentence = styled.span`
+  cursor: default;
   transition: all 110ms;
+  box-sizing: border-box;
   padding: 2px;
   margin-left: 2px;
   margin-right: 2px;
   border-radius: 2px;
   line-height: 1.5;
-  background: ${({ background }) => transparentize(0.65, background)};
-  opacity: ${({ repition }) => 1 - (repition < 4 ? 0.15 * repition : 0.15 * 4)};
+  background: ${({ background }) => background};
+  // opacity: ${({ repition }) =>
+    1 - (repition < 4 ? 0.15 * repition : 0.15 * 4)};
+  opacity: ${{}}
   background: ${({ isHoveredProp, singleFragment, background }) =>
-    isHoveredProp && !singleFragment && transparentize(1, background)};
-  border: ${({ isHoveredProp, singleFragment, background }) =>
-    isHoveredProp && !singleFragment && "1px solid black"};
+    isHoveredProp && !singleFragment && transparentize(0.2, background)};
+  border: 1px solid ${({ background }) => background};
   ${({ isHoveredProp, singleFragment, background }) =>
-    isHoveredProp &&
-    "padding: 4px;" &&
-    !singleFragment &&
-    transparentize(0, background)};
+    isHoveredProp && "padding: 4px;" && !singleFragment && background};
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const Fragment = styled.span`
-  // padding: ${({ spaceOnly }) => (!spaceOnly ? "2px" : null)};
+  transition: all 110ms;
   border-radius: 2px;
   background: ${({ isHoveredProp, spaceOnly, background, onlyFragment }) =>
     isHoveredProp && !spaceOnly && !onlyFragment
-      ? transparentize(0.65, background)
-      : null};
+      ? background
+      : transparentize(1, background)};
 `;
 
 function checkRepition(paragraph, sentenceSize, index) {
@@ -74,14 +77,16 @@ function checkIfPoetry(paragraph) {
 }
 
 export function Output(text) {
-  const [isHovered, setIsHovered] = useState([0, 0]);
+  const [fragmentHovered, setFragmentHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  function handleMouseEnter(pindex, sindex) {
+  function handleMouseEnter(x, pindex, sindex) {
     const coord = [pindex, sindex];
-    setIsHovered(coord);
+    setIsHovered(!x ? coord : false);
   }
 
   function handleMouseLeave() {
+    setFragmentHovered(false);
     setIsHovered(false);
   }
 
@@ -103,7 +108,11 @@ export function Output(text) {
               )}
               background={getValues(sentence).color}
               onMouseEnter={() =>
-                handleMouseEnter(paragraphIndex, sentenceIndex)
+                handleMouseEnter(
+                  makeFragments(sentence.trim()).length <= 1,
+                  paragraphIndex,
+                  sentenceIndex
+                )
               }
               onMouseLeave={handleMouseLeave}
               isHoveredProp={checkIfHovered(paragraphIndex, sentenceIndex)}
@@ -116,6 +125,7 @@ export function Output(text) {
                   spaceOnly={fragment === " " ? true : false}
                   background={getValues(fragment).color}
                   onlyFragment={makeFragments(sentence.trim()).length <= 1}
+                  fragmentHovered={fragmentHovered}
                 >
                   {fragment}
                 </Fragment>

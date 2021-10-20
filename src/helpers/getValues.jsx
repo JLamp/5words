@@ -1,14 +1,14 @@
 import { syllable } from "syllable";
 
 const Sizes = [
-  [4, "s4", "#FFCA3A"],
-  [10, "s10", "#FF730A"],
-  [20, "s20", "#FF595E"],
-  [30, "s30", "#D44894"],
-  [40, "s40", "#9065CA"],
-  [50, "s50", "#15B674"],
-  [70, "s70", "#8AC926"],
-  [90, "s90", "#1982C4"],
+  [4, "s4", "#FFECC0"],
+  [10, "s10", "#FFD0B4"],
+  [20, "s20", "#FFC7C8"],
+  [30, "s30", "#F2C1DA"],
+  [40, "s40", "#D9C9ED"],
+  [50, "s50", "#BAE7CE"],
+  [70, "s70", "#D7ECBA"],
+  [90, "s90", "#B7D4EB"],
 ];
 
 function getCount(e) {
@@ -21,7 +21,7 @@ export function getValues(sentence) {
   var color = Sizes[0][2];
   if (count > Sizes.slice(-1)[0][0]) {
     size = "sX";
-    color = "#1350AC";
+    color = "#B0C2E3";
   } else {
     for (var i = 0; i < Sizes.length; i++) {
       size = Sizes[i][1];
