@@ -31,18 +31,17 @@ const Sentence = styled.span`
   margin-right: 2px;
   border-radius: 2px;
   line-height: 1.5;
-  background: ${({ background }) => background};
-  // opacity: ${({ repition }) =>
-    1 - (repition < 4 ? 0.15 * repition : 0.15 * 4)};
-  opacity: ${{}}
+  opacity: ${({ isAnyHovered, isHoveredProp, repition }) =>
+    isHoveredProp
+      ? 1
+      : isAnyHovered
+      ? 0.5
+      : 1 - (repition < 4 ? 0.15 * repition : 0.15 * 4)};
   background: ${({ isHoveredProp, singleFragment, background }) =>
-    isHoveredProp && !singleFragment && transparentize(0.2, background)};
+    isHoveredProp && !singleFragment
+      ? transparentize(0.6, background)
+      : background};
   border: 1px solid ${({ background }) => background};
-  ${({ isHoveredProp, singleFragment, background }) =>
-    isHoveredProp && "padding: 4px;" && !singleFragment && background};
-  &:hover {
-    opacity: 1;
-  }
 `;
 
 const Fragment = styled.span`
@@ -77,27 +76,38 @@ function checkIfPoetry(paragraph) {
 }
 
 export function Output(text) {
+  const [anyHovered, setAnyHovered] = useState(false);
   const [fragmentHovered, setFragmentHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   function handleMouseEnter(x, pindex, sindex) {
     const coord = [pindex, sindex];
-    setIsHovered(!x ? coord : false);
+    setIsHovered(coord);
+    setAnyHovered(true);
   }
 
   function handleMouseLeave() {
     setFragmentHovered(false);
     setIsHovered(false);
+    setAnyHovered(false);
   }
 
   function checkIfHovered(pindex, sindex) {
     return isHovered[0] === pindex && isHovered[1] === sindex;
   }
 
+  function checkIfAnyHovered() {
+    return anyHovered;
+  }
+
   return (
     <OutputText>
       {makeArray(text.text).map((paragraph, paragraphIndex) => (
-        <Paragraph key={paragraphIndex} poetry={checkIfPoetry(paragraph)}>
+        <Paragraph
+          key={paragraphIndex}
+          poetry={checkIfPoetry(paragraph)}
+          onMouseLeave={handleMouseLeave}
+        >
           {paragraph.map((sentence, sentenceIndex) => (
             <Sentence
               key={sentenceIndex}
@@ -114,9 +124,9 @@ export function Output(text) {
                   sentenceIndex
                 )
               }
-              onMouseLeave={handleMouseLeave}
               isHoveredProp={checkIfHovered(paragraphIndex, sentenceIndex)}
               singleFragment={makeFragments(sentence.trim()).length <= 1}
+              isAnyHovered={checkIfAnyHovered()}
             >
               {makeFragments(sentence.trim()).map((fragment, index) => (
                 <Fragment
