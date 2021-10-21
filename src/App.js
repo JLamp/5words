@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import './App.css';
 import { useState } from 'react';
 import { Layout } from './components/Layout';
 import { Output } from './components/Output';
@@ -41,8 +40,8 @@ padding-bottom: 8px;
 position: sticky;
 top: 0px;
 padding-bottom: 0 16px;
-background-color: white;
-color: #62626c;
+background-color: ${({theme}) => theme.background};
+color: ${({theme}) => theme.textColor.light};
 padding-left: 2px;
 z-index: 1000;
 & svg {
@@ -52,7 +51,6 @@ z-index: 1000;
   fill: #62626c;
 }
 & :hover {
-  color: #1f1f22;
   & svg {
     fill: #1f1f22;
   }
@@ -70,6 +68,11 @@ height: 100%;
 display: block;
 font-size: 14px;
 line-height: 1.5;
+background: ${({theme}) => theme.background};
+color: ${({theme}) => theme.textColor.title};
+&::placeholder{
+  color: ${({theme}) => theme.textColor.light}
+}
 `;
 
 const Button = styled.button`
@@ -80,6 +83,7 @@ border-radius: 4px;
 display: flex;
 align-items: center;
 &:hover, :focus{
+  color: ${({theme}) => theme.textColor.title};
   background-color: rgb(235, 235, 237, 1);
 }
 `;
@@ -98,7 +102,10 @@ function App() {
   }
   
   function randomText(){
-    const ranNum = Math.floor(Math.random() * Text.length);
+    var ranNum = Math.floor(Math.random() * Text.length);
+    while(ranNum === placeholder){
+      ranNum = Math.floor(Math.random() * Text.length)
+    }
     setPlaceholder(ranNum);
     setCurrentInput(Text[ranNum].text);
   }
@@ -115,7 +122,6 @@ function App() {
   
   const ButtonText = userText ? {text: "Your lovely words", icon: <Clear />, button: "Clear"} :  {text: (Text[placeholder].title + " — " + Text[placeholder].author), icon: <Random />, button: "Random" };
   
-  console.log()
   return (
     <Layout>
     <MainContentArea>
@@ -125,7 +131,7 @@ function App() {
     </ButtonContainer>
     <TextContentArea>
     <TextInputContainer>
-    <TextInput type="textarea" placeholder={Text[placeholder].text} value={inputValue} onChange={handleChange}>{currentInput}</TextInput>
+    <TextInput type="textarea" placeholder={Text[placeholder].text} value={inputValue} onChange={handleChange}>OVERIDE VALUE</TextInput>
     </TextInputContainer>
     <Output text={currentInput}/>
     </TextContentArea>

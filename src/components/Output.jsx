@@ -36,27 +36,37 @@ const Sentence = styled.span`
       ? 1
       : isAnyHovered
       ? 0.5
-      : 1 - (repition < 4 ? 0.15 * repition : 0.15 * 4)};
-  background: ${({ isHoveredProp, singleFragment, background }) =>
+      : 1 - (repition < 4 ? 0.1 * repition : 0.1 * 4)};
+  background: ${({ isHoveredProp, singleFragment, size, theme }) =>
     isHoveredProp && !singleFragment
-      ? transparentize(0.6, background)
-      : background};
-  border: 1px solid ${({ background }) => background};
+      ? transparentize(0.6, theme.size[size])
+      : theme.size[size]};
+  border: 1px solid ${({ theme, size }) => theme.size[size]};
+  &:hover {
+    transform: scale(2);
+  }
 `;
 
 const Fragment = styled.span`
   transition: all 110ms;
   border-radius: 2px;
-  background: ${({ isHoveredProp, spaceOnly, background, onlyFragment }) =>
+  background: ${({
+    isHoveredProp,
+    spaceOnly,
+    background,
+    onlyFragment,
+    size,
+    theme,
+  }) =>
     isHoveredProp && !spaceOnly && !onlyFragment
-      ? background
-      : transparentize(1, background)};
+      ? theme.size[size]
+      : transparentize(1, theme.size[size])};
 `;
 
 function checkRepition(paragraph, sentenceSize, index) {
   var repition = 0;
   for (var i = index - 1; i > -1; i--) {
-    if (getValues(paragraph[i]).size === sentenceSize) {
+    if (getValues(paragraph[i]) === sentenceSize) {
       repition = repition + 1;
     } else {
       break;
@@ -66,7 +76,7 @@ function checkRepition(paragraph, sentenceSize, index) {
 }
 
 function makeFragments(sentence) {
-  return sentence.split(/(?<=,|:)(\s)/);
+  return sentence.split(/((?<=,|:|;|-)(\s))/);
 }
 
 function checkIfPoetry(paragraph) {
@@ -113,10 +123,10 @@ export function Output(text) {
               key={sentenceIndex}
               repition={checkRepition(
                 paragraph,
-                getValues(sentence).size,
+                getValues(sentence),
                 sentenceIndex
               )}
-              background={getValues(sentence).color}
+              size={getValues(sentence)}
               onMouseEnter={() =>
                 handleMouseEnter(
                   makeFragments(sentence.trim()).length <= 1,
@@ -133,7 +143,7 @@ export function Output(text) {
                   key={index}
                   isHoveredProp={checkIfHovered(paragraphIndex, sentenceIndex)}
                   spaceOnly={fragment === " " ? true : false}
-                  background={getValues(fragment).color}
+                  size={getValues(fragment)}
                   onlyFragment={makeFragments(sentence.trim()).length <= 1}
                   fragmentHovered={fragmentHovered}
                 >

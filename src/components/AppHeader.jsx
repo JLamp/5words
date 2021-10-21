@@ -8,6 +8,7 @@ const StyledAppHeader = styled.div`
   width: 100%;
   height: 64px;
   justify-content: center;
+  background: ${({ theme }) => theme.background};
 `;
 
 const Logo = styled(UnstyledLogo)`
@@ -19,6 +20,7 @@ const Logo = styled(UnstyledLogo)`
 const Title = styled.div`
   font-size: 24px;
   font-weight: bold;
+  color: ${({ theme }) => theme.textColor.title};
 `;
 
 export function AppHeader() {
