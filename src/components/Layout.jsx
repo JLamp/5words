@@ -43,6 +43,7 @@ const PageContainer = styled.div`
   flex-direction: column;
   height: 100vh;
   max-height: 100vh;
+  width: 100%;
   max-width: 960px;
   justify-content: center;
   margin: 0 24px;
