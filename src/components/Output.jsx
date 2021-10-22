@@ -2,17 +2,21 @@ import styled from "styled-components";
 import { transparentize } from "polished";
 import { getValues } from "../helpers/getValues";
 import { useState } from "react";
-import { splitSentences } from "../helpers/makeArray";
+import { makeArray } from "../helpers/makeArray";
 
 const OutputText = styled.div`
   overflow: scroll;
-  @media (max-width: 600px) {
+  & :first-child {
+    margin-top: 0;
+  }
+  @media (${({ theme }) => theme.breakpoint}) {
     grid-row: 1;
+    height: 100%;
   }
 `;
 
 const Paragraph = styled.p`
-  line-height: 1.7;
+  line-height: 28px;
   & :first-child {
     margin-left: 0;
   }
@@ -23,10 +27,10 @@ const Sentence = styled.span`
   transition: all 110ms;
   box-sizing: border-box;
   padding: 2px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin-right: 4px;
   border-radius: 2px;
-  line-height: 1.5;
+  line-height: 1;
+  font-size: 16px;
   opacity: ${({ isAnyHovered, isHoveredProp, repition }) =>
     isHoveredProp
       ? 1
@@ -38,9 +42,6 @@ const Sentence = styled.span`
       ? transparentize(0.6, theme.size[size])
       : theme.size[size]};
   border: 1px solid ${({ theme, size }) => theme.size[size]};
-  &:hover {
-    transform: scale(2);
-  }
 `;
 
 const Fragment = styled.span`
@@ -97,7 +98,7 @@ export function Output(text) {
 
   return (
     <OutputText>
-      {splitSentences(text.text).map((paragraph, paragraphIndex) => (
+      {makeArray(text.text).map((paragraph, paragraphIndex) => (
         <Paragraph
           key={paragraphIndex}
           poetry={checkIfPoetry(paragraph)}
@@ -137,7 +138,7 @@ export function Output(text) {
                         {fragment.trim()}
                       </Fragment>
                       {index + 1 !== sentence.length ? (
-                        <span key={[index, 1]}> </span>
+                        <span key={[index, 1]}>&nbsp;</span>
                       ) : null}
                     </>
                   ))}

@@ -6,8 +6,6 @@ const StyledFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 auto;
-  align-self: flex-end;
   height: 48px;
   background: ${({ theme }) => theme.background};
   font-size: 14px;

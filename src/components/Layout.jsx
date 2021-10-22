@@ -4,6 +4,12 @@ import { Footer } from "./Footer";
 import { transparentize } from "polished";
 
 const GlobalStyle = createGlobalStyle`
+:root{
+  overflow: hidden;
+}
+html, body, :root, #root {
+  height: 100%;
+}
 button {
   all: unset;
 }
@@ -36,17 +42,19 @@ const GlobalContainer = styled.div`
   background: ${({ theme }) => theme.background};
   display: flex;
   justify-content: center;
+  height: 100%;
 `;
 
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-height: 100vh;
   width: 100%;
   max-width: 960px;
   justify-content: center;
   margin: 0 24px;
+  @media (${({ theme }) => theme.breakpoint}) {
+    margin: 0 16px;
+  }
 `;
 
 const lightTheme = {
@@ -67,6 +75,7 @@ const lightTheme = {
     s90: "#B7D4EB",
     sX: "#B0C2E3",
   },
+  breakpoint: "max-width: 600px",
 };
 
 // const darkTheme = {

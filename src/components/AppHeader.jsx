@@ -6,21 +6,30 @@ const StyledAppHeader = styled.div`
   align-items: center;
   margin: 16px 0;
   width: 100%;
-  height: 64px;
   justify-content: center;
   background: ${({ theme }) => theme.background};
+  @media (${({ theme }) => theme.breakpoint}) {
+    margin: 8px 0;
+  }
 `;
 
 const Logo = styled(UnstyledLogo)`
   height: 32px;
   width: 32px;
   margin-right: 16px;
+  @media (${({ theme }) => theme.breakpoint}) {
+    height: 24px;
+    width: 24px;
+  }
 `;
 
-const Title = styled.div`
+const Title = styled.h1`
   font-size: 24px;
   font-weight: bold;
   color: ${({ theme }) => theme.textColor.title};
+  @media (${({ theme }) => theme.breakpoint}) {
+    font-size: 18px;
+  }
 `;
 
 export function AppHeader() {

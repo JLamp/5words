@@ -1,6 +1,6 @@
 //To-Do: remove titles
 
-export function splitSentences(input) {
+export function makeArray(input) {
   const sentenceMarker = "___";
   const fragmentMarker = "***";
   const getParagraphs = (input) => input.split(/\n+/g);
@@ -84,14 +84,14 @@ export function splitSentences(input) {
       "Sr",
       "Hon",
     ];
-    var sanitizedText = input;
-    for (var i = 0; i < titles.length; i++) {
-      var title = titles[i];
-      sanitizedText = sanitizedText.replace(
-        new RegExp(title + "\\." + sentenceMarker, "g"),
-        title + ". "
-      );
-    }
+    const sanitizedText = titles.reduce(
+      (memo, title) =>
+        memo.replace(
+          new RegExp(title + "\\." + sentenceMarker, "g"),
+          title + ". "
+        ),
+      input
+    );
     return sanitizedText;
   };
 
