@@ -37,10 +37,10 @@ color: ${({theme}) => theme.textColor.light};
 padding-left: 2px;
 @media(${({theme}) => theme.breakpoint}){
   grid-column: span 1;
+  font-size: 12px;
+  text-align: center;
 }
 `;
-
-
 
 const TextInputContainer = styled.div`
 width: 100%;
@@ -59,6 +59,9 @@ color: ${({theme}) => theme.textColor.title};
   color: ${({theme}) => theme.textColor.light};
   font-family: 'Courier', monospace;
 }
+@media(${({theme}) => theme.breakpoint}){
+  font-size: 14px;
+}
 `;
 
 const Button = styled.button`
@@ -71,6 +74,11 @@ align-items: center;
 &:hover, :focus{
   color: ${({theme}) => theme.textColor.title};
   background-color: rgb(235, 235, 237, 1);
+}
+@media(${({theme}) => theme.breakpoint}){
+  &:hover, :focus{
+    background-color: none;
+  }
 }
 & svg {
   width: 16px;

@@ -43,12 +43,6 @@ export function Footer() {
           <Key size={size.size} />
         ))}
       </Legend>
-      <FooterLink>
-        Inspired by{" "}
-        <a href="https://i1.wp.com/www.aerogrammestudio.com/wp-content/uploads/2014/08/this-sentence-has-five-works.jpg?w=640&ssl=1">
-          this image
-        </a>
-      </FooterLink>
     </StyledFooter>
   );
 }

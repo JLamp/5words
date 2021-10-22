@@ -10,6 +10,7 @@ const StyledAppHeader = styled.div`
   background: ${({ theme }) => theme.background};
   @media (${({ theme }) => theme.breakpoint}) {
     margin: 8px 0;
+    padding: 4px 0;
   }
 `;
 
@@ -29,6 +30,7 @@ const Title = styled.h1`
   color: ${({ theme }) => theme.textColor.title};
   @media (${({ theme }) => theme.breakpoint}) {
     font-size: 18px;
+    display: none;
   }
 `;
 
