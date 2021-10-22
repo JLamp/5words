@@ -84,6 +84,36 @@ export function makeArray(input) {
       "Sr",
       "Hon",
     ];
+
+    const caps = [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ];
+
     const sanitizedText = titles.reduce(
       (memo, title) =>
         memo.replace(
@@ -92,7 +122,13 @@ export function makeArray(input) {
         ),
       input
     );
-    return sanitizedText;
+
+    const sanitizedTextCaps = caps.reduce(
+      (memo, cap) =>
+        memo.replace(new RegExp(cap + "\\." + sentenceMarker, "g"), cap + ". "),
+      sanitizedText
+    );
+    return sanitizedTextCaps;
   };
 
   const process = (input) => {

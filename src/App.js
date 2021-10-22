@@ -48,6 +48,7 @@ height: 100%;
 `;
 
 const TextInput = styled.textarea`
+font-family: 'Courier', monospace;
 width: 100%;
 height: 100%;
 display: block;
@@ -57,7 +58,7 @@ background: ${({theme}) => theme.background};
 color: ${({theme}) => theme.textColor.title};
 &::placeholder{
   color: ${({theme}) => theme.textColor.light};
-  font-family: 'Courier', monospace;
+
 }
 @media(${({theme}) => theme.breakpoint}){
   font-size: 14px;

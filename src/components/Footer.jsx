@@ -26,7 +26,6 @@ const Legend = styled.div`
 `;
 
 const Key = styled.div`
-  background: red;
   height: 8px;
   border-radius: 2px;
   background: ${({ theme, size }) => theme.size[size]};
