@@ -119,6 +119,36 @@ function App() {
   function handleClick(){
     userText ? clearText() : randomText();
   }
+
+  // New Split Sentences
+  function splitSentences(input) {
+    const sentenceMarker = "___";
+    const getParagraphs = (input) => input.split("\n\n");
+  
+    const markSentences = (input) => {
+      const chars = [
+        [".", /\./g],
+        ["!", /!/g],
+        ["‽", /‽/g],
+        ["?", /\?/g],
+      ];
+      return chars.reduce((memo, [char, pattern]) => {
+        return memo.replace(pattern, `${char}${sentenceMarker}`);
+      }, input);
+    };
+  
+    const splitSentences = (paragraphs) =>
+      paragraphs.map((paragraph) => paragraph.split(sentenceMarker));
+  
+    const process = (input) => {
+      const markedInput = markSentences(input);
+      const paragraphs = getParagraphs(markedInput);
+      return splitSentences(paragraphs);
+    };
+    return process(input);
+  }
+
+  console.log(splitSentences(Text[0].text));
   
   const ButtonText = userText ? {text: "Your lovely words", icon: <Clear />, button: "Clear"} :  {text: (Text[placeholder].title + " — " + Text[placeholder].author), icon: <Random />, button: "Random" };
   

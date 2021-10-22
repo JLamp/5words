@@ -2,20 +2,16 @@ import styled from "styled-components";
 import { transparentize } from "polished";
 import { getValues } from "../helpers/getValues";
 import { useState } from "react";
-import { makeArray } from "../helpers/makeArray";
+import { splitSentences } from "../helpers/makeArray";
 
 const OutputText = styled.div`
   overflow: scroll;
-  & :first-child {
-    margin-top: 0;
-  }
   @media (max-width: 600px) {
     grid-row: 1;
   }
 `;
 
 const Paragraph = styled.p`
-  margin: ${({ poetry }) => (poetry ? "4px" : "16px")} 0;
   line-height: 1.7;
   & :first-child {
     margin-left: 0;
@@ -50,14 +46,7 @@ const Sentence = styled.span`
 const Fragment = styled.span`
   transition: all 110ms;
   border-radius: 2px;
-  background: ${({
-    isHoveredProp,
-    spaceOnly,
-    background,
-    onlyFragment,
-    size,
-    theme,
-  }) =>
+  background: ${({ isHoveredProp, spaceOnly, onlyFragment, size, theme }) =>
     isHoveredProp && !spaceOnly && !onlyFragment
       ? theme.size[size]
       : transparentize(1, theme.size[size])};
@@ -73,10 +62,6 @@ function checkRepition(paragraph, sentenceSize, index) {
     }
   }
   return repition;
-}
-
-function makeFragments(sentence) {
-  return sentence.split(/((?<=,|:|;|-)(\s))/);
 }
 
 function checkIfPoetry(paragraph) {
@@ -112,46 +97,53 @@ export function Output(text) {
 
   return (
     <OutputText>
-      {makeArray(text.text).map((paragraph, paragraphIndex) => (
+      {splitSentences(text.text).map((paragraph, paragraphIndex) => (
         <Paragraph
           key={paragraphIndex}
           poetry={checkIfPoetry(paragraph)}
           onMouseLeave={handleMouseLeave}
         >
-          {paragraph.map((sentence, sentenceIndex) => (
-            <Sentence
-              key={sentenceIndex}
-              repition={checkRepition(
-                paragraph,
-                getValues(sentence),
-                sentenceIndex
-              )}
-              size={getValues(sentence)}
-              onMouseEnter={() =>
-                handleMouseEnter(
-                  makeFragments(sentence.trim()).length <= 1,
-                  paragraphIndex,
-                  sentenceIndex
-                )
-              }
-              isHoveredProp={checkIfHovered(paragraphIndex, sentenceIndex)}
-              singleFragment={makeFragments(sentence.trim()).length <= 1}
-              isAnyHovered={checkIfAnyHovered()}
-            >
-              {makeFragments(sentence.trim()).map((fragment, index) => (
-                <Fragment
-                  key={index}
+          {paragraph.map(
+            (sentence, sentenceIndex) =>
+              sentence[0].length > 0 && (
+                <Sentence
+                  key={sentenceIndex}
+                  repition={checkRepition(
+                    paragraph,
+                    getValues(sentence),
+                    sentenceIndex
+                  )}
+                  size={getValues(sentence)}
+                  onMouseEnter={() =>
+                    handleMouseEnter(false, paragraphIndex, sentenceIndex)
+                  }
                   isHoveredProp={checkIfHovered(paragraphIndex, sentenceIndex)}
-                  spaceOnly={fragment === " " ? true : false}
-                  size={getValues(fragment)}
-                  onlyFragment={makeFragments(sentence.trim()).length <= 1}
-                  fragmentHovered={fragmentHovered}
+                  singleFragment={sentence.length <= 1}
+                  isAnyHovered={checkIfAnyHovered()}
                 >
-                  {fragment}
-                </Fragment>
-              ))}
-            </Sentence>
-          ))}
+                  {sentence.map((fragment, index) => (
+                    <>
+                      <Fragment
+                        key={[index, 0]}
+                        isHoveredProp={checkIfHovered(
+                          paragraphIndex,
+                          sentenceIndex
+                        )}
+                        spaceOnly={fragment === " " ? true : false}
+                        size={getValues(fragment)}
+                        onlyFragment={sentence.length <= 1}
+                        fragmentHovered={fragmentHovered}
+                      >
+                        {fragment.trim()}
+                      </Fragment>
+                      {index + 1 !== sentence.length ? (
+                        <span key={[index, 1]}> </span>
+                      ) : null}
+                    </>
+                  ))}
+                </Sentence>
+              )
+          )}
         </Paragraph>
       ))}
     </OutputText>

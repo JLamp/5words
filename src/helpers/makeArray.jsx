@@ -1,15 +1,105 @@
-export function splitSentence(e) {
-  const arr = e.split(
-    /(?<=((?<!Adm|Amb|Brass|Brig|Gen|Br|Cpt|Capt|Chan|Chapln|Cmdr|Cdr|Col|Cpl|Cntss|Dr|Drs|Ens|Fr|Gen|Gov|Lt|2Lt|2dLt|Mlle|Maj|Sgt|Mme|Msgr|Mr|Mrs|Ms|Mx|Pres|Prof|Rep|Revs|Rev|Sgt|Sen|Sr|Hon|[A-Z])\.|!|‽|\?)("|)\s)/
-  );
-  return arr;
-}
+//To-Do: remove titles
 
-export function makeArray(text) {
-  var paragraphArray = text.split(/\n+/);
-  for (var i = 0; i < paragraphArray.length; i++) {
-    paragraphArray[i] = splitSentence(paragraphArray[i]);
-    paragraphArray[i] = paragraphArray[i].filter((word) => /[a-z]/i.test(word));
-  }
-  return paragraphArray;
+export function splitSentences(input) {
+  const sentenceMarker = "___";
+  const fragmentMarker = "***";
+  const getParagraphs = (input) => input.split(/\n+/g);
+
+  const markSentences = (input) => {
+    const chars = [
+      [".", /\.\s/g],
+      ["!", /!\s/g],
+      ["‽", /‽\s/g],
+      ["?", /\?\s/g],
+      ['."', /\."\s/g],
+      ['!"', /!"\s/g],
+      ['‽"', /‽"\s/g],
+      ['?"', /\?"\s/g],
+    ];
+    return chars.reduce((memo, [char, pattern]) => {
+      return memo.replace(pattern, `${char}${sentenceMarker}`);
+    }, input);
+  };
+
+  const markFragments = (input) => {
+    const chars = [
+      [",", /,/g],
+      [";", /;/g],
+      [" -", /\s-/g],
+    ];
+    return chars.reduce((memo, [char, pattern]) => {
+      return memo.replace(pattern, `${char}${fragmentMarker}`);
+    }, input);
+  };
+
+  const splitSentences = (paragraphs) =>
+    paragraphs.map((paragraph) =>
+      paragraph
+        .split(sentenceMarker)
+        .map((sentence) => sentence.split(fragmentMarker))
+    );
+
+  const sanitizeText = (input) => {
+    const titles = [
+      "Adm",
+      "Amb",
+      "Brass",
+      "Brig",
+      "Gen",
+      "Br",
+      "Cpt",
+      "Capt",
+      "Chan",
+      "Chapln",
+      "Cmdr",
+      "Cdr",
+      "Col",
+      "Cpl",
+      "Cntss",
+      "Dr",
+      "Drs",
+      "Ens",
+      "Fr",
+      "Gen",
+      "Gov",
+      "Lt",
+      "2Lt",
+      "2dLt",
+      "Mlle",
+      "Maj",
+      "Sgt",
+      "Mme",
+      "Msgr",
+      "Mr",
+      "Mrs",
+      "Ms",
+      "Mx",
+      "Pres",
+      "Prof",
+      "Rep",
+      "Revs",
+      "Rev",
+      "Sgt",
+      "Sen",
+      "Sr",
+      "Hon",
+    ];
+    var sanitizedText = input;
+    for (var i = 0; i < titles.length; i++) {
+      var title = titles[i];
+      sanitizedText = sanitizedText.replace(
+        new RegExp(title + "\\." + sentenceMarker, "g"),
+        title + ". "
+      );
+    }
+    return sanitizedText;
+  };
+
+  const process = (input) => {
+    const markedInput = sanitizeText(markSentences(markFragments(input)));
+    const paragraphs = getParagraphs(markedInput);
+    return splitSentences(paragraphs);
+  };
+  console.log(process(input));
+  return process(input);
 }
