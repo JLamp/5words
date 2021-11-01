@@ -26,6 +26,7 @@ export function makeArray(input) {
       [",", /,/g],
       [";", /;/g],
       [" -", /\s-/g],
+      [":", /:/g],
     ];
     return chars.reduce((memo, [char, pattern]) => {
       return memo.replace(pattern, `${char}${fragmentMarker}`);

@@ -11,7 +11,7 @@ const MainContentArea = styled.div`
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 100%;
+  grid-template-rows: 48px auto;
   grid-column-gap: 24px;
   overflow: hidden;
   @media(${({theme}) => theme.breakpoint}){
